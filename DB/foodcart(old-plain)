@@ -1,0 +1,2882 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.10 (Ubuntu 14.10-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1)
+
+-- Started on 2024-09-23 11:48:22 IST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 275 (class 1255 OID 26920)
+-- Name: reset_sequence(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.reset_sequence() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('ALTER SEQUENCE dealer_entity_id_seq RESTART WITH 1');
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION public.reset_sequence() OWNER TO postgres;
+
+--
+-- TOC entry 274 (class 1255 OID 26918)
+-- Name: reset_sequence_after_truncate(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.reset_sequence_after_truncate() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('ALTER SEQUENCE dealer_entity_id_seq RESTART WITH 1');
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION public.reset_sequence_after_truncate() OWNER TO postgres;
+
+--
+-- TOC entry 278 (class 1255 OID 27580)
+-- Name: reset_sequence_customer(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.reset_sequence_customer() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('ALTER SEQUENCE customer_id_seq RESTART WITH 1');
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION public.reset_sequence_customer() OWNER TO postgres;
+
+--
+-- TOC entry 279 (class 1255 OID 27582)
+-- Name: reset_sequence_customer_truncate(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.reset_sequence_customer_truncate() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('ALTER SEQUENCE customer_id_seq RESTART WITH 1');
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION public.reset_sequence_customer_truncate() OWNER TO postgres;
+
+--
+-- TOC entry 276 (class 1255 OID 26924)
+-- Name: reset_sequence_dmenu_after_truncate(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.reset_sequence_dmenu_after_truncate() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('ALTER SEQUENCE dealer_menu_id_seq RESTART WITH 1');
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION public.reset_sequence_dmenu_after_truncate() OWNER TO postgres;
+
+--
+-- TOC entry 277 (class 1255 OID 26922)
+-- Name: reset_sequence_menu(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.reset_sequence_menu() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('ALTER SEQUENCE dealer_menu_id_seq RESTART WITH 1');
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION public.reset_sequence_menu() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 216 (class 1259 OID 29877)
+-- Name: admin_info; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.admin_info (
+    id integer NOT NULL,
+    username character varying(255) NOT NULL,
+    mobile bigint NOT NULL,
+    email character varying NOT NULL
+);
+
+
+ALTER TABLE public.admin_info OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 29876)
+-- Name: admin_info_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.admin_info_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.admin_info_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3735 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: admin_info_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.admin_info_id_seq OWNED BY public.admin_info.id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 29923)
+-- Name: admin_notification; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.admin_notification (
+    id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    "dealerId" integer,
+    "adminId" integer,
+    message character varying NOT NULL,
+    title character varying NOT NULL
+);
+
+
+ALTER TABLE public.admin_notification OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 29922)
+-- Name: admin_notification_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.admin_notification_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.admin_notification_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3736 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: admin_notification_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.admin_notification_id_seq OWNED BY public.admin_notification.id;
+
+
+--
+-- TOC entry 238 (class 1259 OID 39982)
+-- Name: agent; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.agent (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    address character varying(255) NOT NULL,
+    mobile bigint NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    is_active boolean DEFAULT true NOT NULL,
+    fcmtoken character varying(300)
+);
+
+
+ALTER TABLE public.agent OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1259 OID 39981)
+-- Name: agent_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.agent_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.agent_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3737 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: agent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.agent_id_seq OWNED BY public.agent.id;
+
+
+--
+-- TOC entry 236 (class 1259 OID 39683)
+-- Name: category; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.category (
+    id integer NOT NULL,
+    type character varying NOT NULL,
+    preference character varying NOT NULL,
+    "dealermenuId" integer,
+    category character varying[] NOT NULL,
+    cuisine character varying[] NOT NULL,
+    meal_type character varying[] NOT NULL
+);
+
+
+ALTER TABLE public.category OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1259 OID 39682)
+-- Name: category_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.category_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3738 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.category_id_seq OWNED BY public.category.id;
+
+
+--
+-- TOC entry 210 (class 1259 OID 26871)
+-- Name: dealer_entity; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_entity (
+    id integer NOT NULL,
+    restaurant_name character varying(255) NOT NULL,
+    restaurant_type character varying(255) NOT NULL,
+    restaurant_category character varying(255) NOT NULL,
+    restaurant_mobileno bigint NOT NULL,
+    restaurant_address character varying(255) NOT NULL,
+    username character varying(255) NOT NULL,
+    password character varying(255) NOT NULL,
+    user_address character varying(255) NOT NULL,
+    user_mobile bigint NOT NULL,
+    emailid character varying(255) NOT NULL,
+    opens_at character varying(30) NOT NULL,
+    closes_at character varying(30) NOT NULL,
+    days_available character varying(255) NOT NULL,
+    latitude character varying(255) NOT NULL,
+    longitude character varying(255) NOT NULL,
+    is_active boolean DEFAULT true NOT NULL,
+    no_pan character varying(255) NOT NULL,
+    name_pan character varying(255) NOT NULL,
+    address_pan character varying(255) NOT NULL,
+    no_gst character varying(255) NOT NULL,
+    no_fssai bigint NOT NULL,
+    images text NOT NULL,
+    reset character varying(255),
+    expdate_fssai character varying(100) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    cuisine character varying(255) NOT NULL,
+    ratings double precision,
+    role character varying(255) DEFAULT 'admin'::character varying NOT NULL,
+    rush_hour boolean DEFAULT false NOT NULL,
+    schedule boolean DEFAULT false NOT NULL,
+    takeaway boolean DEFAULT false NOT NULL,
+    dinning boolean DEFAULT false NOT NULL,
+    delivery boolean DEFAULT true NOT NULL,
+    schedule_order boolean DEFAULT true NOT NULL,
+    fcmtoken character varying(300)
+);
+
+
+ALTER TABLE public.dealer_entity OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 26870)
+-- Name: dealer_entity_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.dealer_entity_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+    CYCLE;
+
+
+ALTER TABLE public.dealer_entity_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3739 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: dealer_entity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.dealer_entity_id_seq OWNED BY public.dealer_entity.id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 29991)
+-- Name: dealer_managestaff; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_managestaff (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    mobile bigint NOT NULL,
+    role character varying(255) DEFAULT 'employee'::character varying NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    is_active boolean DEFAULT true NOT NULL,
+    "dealerId" integer
+);
+
+
+ALTER TABLE public.dealer_managestaff OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 29990)
+-- Name: dealer_managestaff_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.dealer_managestaff_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.dealer_managestaff_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3740 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: dealer_managestaff_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.dealer_managestaff_id_seq OWNED BY public.dealer_managestaff.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 27496)
+-- Name: dealer_menu; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_menu (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    price double precision NOT NULL,
+    is_available boolean DEFAULT true NOT NULL,
+    images text,
+    "dealerId" integer,
+    ratings double precision,
+    "desc" character varying(255) NOT NULL,
+    spicylevel character varying(255) NOT NULL,
+    servepeople integer NOT NULL,
+    gst double precision NOT NULL,
+    packagecharge double precision,
+    shorts text
+);
+
+
+ALTER TABLE public.dealer_menu OWNER TO postgres;
+
+--
+-- TOC entry 249 (class 1259 OID 41055)
+-- Name: dealer_menu_addons_product_add_on; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_menu_addons_product_add_on (
+    "dealerMenuId" integer NOT NULL,
+    "productAddOnId" integer NOT NULL
+);
+
+
+ALTER TABLE public.dealer_menu_addons_product_add_on OWNER TO postgres;
+
+--
+-- TOC entry 254 (class 1259 OID 41554)
+-- Name: dealer_menu_customization_product_customization; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_menu_customization_product_customization (
+    "dealerMenuId" integer NOT NULL,
+    "productCustomizationId" integer NOT NULL
+);
+
+
+ALTER TABLE public.dealer_menu_customization_product_customization OWNER TO postgres;
+
+--
+-- TOC entry 251 (class 1259 OID 41133)
+-- Name: dealer_menu_foodtag_product_tag; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_menu_foodtag_product_tag (
+    "dealerMenuId" integer NOT NULL,
+    "productTagId" integer NOT NULL
+);
+
+
+ALTER TABLE public.dealer_menu_foodtag_product_tag OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 27495)
+-- Name: dealer_menu_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.dealer_menu_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+    CYCLE;
+
+
+ALTER TABLE public.dealer_menu_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3741 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: dealer_menu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.dealer_menu_id_seq OWNED BY public.dealer_menu.id;
+
+
+--
+-- TOC entry 250 (class 1259 OID 41099)
+-- Name: dealer_menu_ingredient_products_ingredient; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_menu_ingredient_products_ingredient (
+    "dealerMenuId" integer NOT NULL,
+    "productsIngredientId" integer NOT NULL
+);
+
+
+ALTER TABLE public.dealer_menu_ingredient_products_ingredient OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 38407)
+-- Name: dealer_notifications; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_notifications (
+    id integer NOT NULL,
+    "dealerId" integer,
+    reason character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    timetake integer NOT NULL
+);
+
+
+ALTER TABLE public.dealer_notifications OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 38406)
+-- Name: dealer_notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.dealer_notifications_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+    CYCLE;
+
+
+ALTER TABLE public.dealer_notifications_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3742 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: dealer_notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.dealer_notifications_id_seq OWNED BY public.dealer_notifications.id;
+
+
+--
+-- TOC entry 222 (class 1259 OID 30186)
+-- Name: dealer_to_admin_complient; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dealer_to_admin_complient (
+    id integer NOT NULL,
+    title character varying NOT NULL,
+    message character varying NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    "dealerId" integer,
+    "adminId" integer
+);
+
+
+ALTER TABLE public.dealer_to_admin_complient OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 30185)
+-- Name: dealer_to_admin_complient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.dealer_to_admin_complient_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.dealer_to_admin_complient_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3743 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: dealer_to_admin_complient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.dealer_to_admin_complient_id_seq OWNED BY public.dealer_to_admin_complient.id;
+
+
+--
+-- TOC entry 262 (class 1259 OID 42105)
+-- Name: order_item; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.order_item (
+    id integer NOT NULL,
+    item_qty integer NOT NULL,
+    "orderId" integer,
+    "productId" integer,
+    "scheduleOrderId" integer
+);
+
+
+ALTER TABLE public.order_item OWNER TO postgres;
+
+--
+-- TOC entry 261 (class 1259 OID 42104)
+-- Name: order_item_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.order_item_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.order_item_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3744 (class 0 OID 0)
+-- Dependencies: 261
+-- Name: order_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.order_item_id_seq OWNED BY public.order_item.id;
+
+
+--
+-- TOC entry 260 (class 1259 OID 42091)
+-- Name: order_management; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.order_management (
+    id integer NOT NULL,
+    deliverystatus character varying(255),
+    total double precision,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    cancelled_at timestamp without time zone DEFAULT now() NOT NULL,
+    preorder boolean DEFAULT false NOT NULL,
+    schedule_date character varying(255),
+    schedule_time character varying(255),
+    modified_at timestamp without time zone DEFAULT now() NOT NULL,
+    order_instruction character varying NOT NULL,
+    deliver_to character varying,
+    "cancelledBy" character varying(255),
+    cancellation boolean DEFAULT false NOT NULL,
+    preparation_time integer,
+    "dealerId" integer,
+    userid integer,
+    "agentId" integer
+);
+
+
+ALTER TABLE public.order_management OWNER TO postgres;
+
+--
+-- TOC entry 259 (class 1259 OID 42090)
+-- Name: order_management_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.order_management_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.order_management_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3745 (class 0 OID 0)
+-- Dependencies: 259
+-- Name: order_management_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.order_management_id_seq OWNED BY public.order_management.id;
+
+
+--
+-- TOC entry 230 (class 1259 OID 39157)
+-- Name: otp; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.otp (
+    id integer NOT NULL,
+    otp bigint NOT NULL
+);
+
+
+ALTER TABLE public.otp OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 39156)
+-- Name: otp_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.otp_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.otp_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3746 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: otp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.otp_id_seq OWNED BY public.otp.id;
+
+
+--
+-- TOC entry 228 (class 1259 OID 39026)
+-- Name: payment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.payment (
+    transcationid bigint NOT NULL,
+    payment_method character varying(255) NOT NULL,
+    amount double precision NOT NULL,
+    payment_status character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    "orderId" integer
+);
+
+
+ALTER TABLE public.payment OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 39025)
+-- Name: payment_transcationid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.payment_transcationid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.payment_transcationid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3747 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: payment_transcationid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.payment_transcationid_seq OWNED BY public.payment.transcationid;
+
+
+--
+-- TOC entry 244 (class 1259 OID 40891)
+-- Name: product_add_on; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_add_on (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    price double precision NOT NULL,
+    "dealerId" integer
+);
+
+
+ALTER TABLE public.product_add_on OWNER TO postgres;
+
+--
+-- TOC entry 243 (class 1259 OID 40890)
+-- Name: product_add_on_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_add_on_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.product_add_on_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3748 (class 0 OID 0)
+-- Dependencies: 243
+-- Name: product_add_on_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.product_add_on_id_seq OWNED BY public.product_add_on.id;
+
+
+--
+-- TOC entry 255 (class 1259 OID 41582)
+-- Name: product_add_on_product_dealer_menu; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_add_on_product_dealer_menu (
+    "productAddOnId" integer NOT NULL,
+    "dealerMenuId" integer NOT NULL
+);
+
+
+ALTER TABLE public.product_add_on_product_dealer_menu OWNER TO postgres;
+
+--
+-- TOC entry 253 (class 1259 OID 41539)
+-- Name: product_customization; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_customization (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    price integer NOT NULL,
+    "dealerId" integer
+);
+
+
+ALTER TABLE public.product_customization OWNER TO postgres;
+
+--
+-- TOC entry 252 (class 1259 OID 41538)
+-- Name: product_customization_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_customization_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.product_customization_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3749 (class 0 OID 0)
+-- Dependencies: 252
+-- Name: product_customization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.product_customization_id_seq OWNED BY public.product_customization.id;
+
+
+--
+-- TOC entry 258 (class 1259 OID 41603)
+-- Name: product_customization_product_dealer_menu; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_customization_product_dealer_menu (
+    "productCustomizationId" integer NOT NULL,
+    "dealerMenuId" integer NOT NULL
+);
+
+
+ALTER TABLE public.product_customization_product_dealer_menu OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1259 OID 40848)
+-- Name: product_rating; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_rating (
+    id integer NOT NULL,
+    product_star integer NOT NULL,
+    comments character varying(255) NOT NULL,
+    "ratingId" integer,
+    "productId" integer
+);
+
+
+ALTER TABLE public.product_rating OWNER TO postgres;
+
+--
+-- TOC entry 239 (class 1259 OID 40847)
+-- Name: product_rating_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_rating_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.product_rating_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3750 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: product_rating_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.product_rating_id_seq OWNED BY public.product_rating.id;
+
+
+--
+-- TOC entry 248 (class 1259 OID 40922)
+-- Name: product_tag; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_tag (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    "dealerId" integer
+);
+
+
+ALTER TABLE public.product_tag OWNER TO postgres;
+
+--
+-- TOC entry 247 (class 1259 OID 40921)
+-- Name: product_tag_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_tag_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.product_tag_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3751 (class 0 OID 0)
+-- Dependencies: 247
+-- Name: product_tag_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.product_tag_id_seq OWNED BY public.product_tag.id;
+
+
+--
+-- TOC entry 257 (class 1259 OID 41596)
+-- Name: product_tag_product_dealer_menu; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_tag_product_dealer_menu (
+    "productTagId" integer NOT NULL,
+    "dealerMenuId" integer NOT NULL
+);
+
+
+ALTER TABLE public.product_tag_product_dealer_menu OWNER TO postgres;
+
+--
+-- TOC entry 246 (class 1259 OID 40913)
+-- Name: products_ingredient; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products_ingredient (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    "dealerId" integer
+);
+
+
+ALTER TABLE public.products_ingredient OWNER TO postgres;
+
+--
+-- TOC entry 245 (class 1259 OID 40912)
+-- Name: products_ingredient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.products_ingredient_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_ingredient_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3752 (class 0 OID 0)
+-- Dependencies: 245
+-- Name: products_ingredient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.products_ingredient_id_seq OWNED BY public.products_ingredient.id;
+
+
+--
+-- TOC entry 256 (class 1259 OID 41589)
+-- Name: products_ingredient_product_dealer_menu; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products_ingredient_product_dealer_menu (
+    "productsIngredientId" integer NOT NULL,
+    "dealerMenuId" integer NOT NULL
+);
+
+
+ALTER TABLE public.products_ingredient_product_dealer_menu OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 27605)
+-- Name: promo_offers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.promo_offers (
+    id integer NOT NULL,
+    promoname character varying(255) NOT NULL,
+    coupon_code character varying(255) NOT NULL,
+    description character varying(255) NOT NULL,
+    instruction character varying(255) NOT NULL,
+    "dealerId" integer,
+    provider character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.promo_offers OWNER TO postgres;
+
+--
+-- TOC entry 213 (class 1259 OID 27604)
+-- Name: promo_offers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.promo_offers_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+    CYCLE;
+
+
+ALTER TABLE public.promo_offers_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3753 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: promo_offers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.promo_offers_id_seq OWNED BY public.promo_offers.id;
+
+
+--
+-- TOC entry 242 (class 1259 OID 40855)
+-- Name: rating; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rating (
+    id integer NOT NULL,
+    dealer_star integer NOT NULL,
+    comments character varying NOT NULL,
+    complient character varying(255),
+    "dealerId" integer,
+    "userUserid" integer,
+    "orderId" integer
+);
+
+
+ALTER TABLE public.rating OWNER TO postgres;
+
+--
+-- TOC entry 241 (class 1259 OID 40854)
+-- Name: rating_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rating_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rating_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3754 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: rating_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rating_id_seq OWNED BY public.rating.id;
+
+
+--
+-- TOC entry 234 (class 1259 OID 39217)
+-- Name: restaurant_slot_timing; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.restaurant_slot_timing (
+    id integer NOT NULL,
+    "dealerId" integer,
+    from_time character varying(255) NOT NULL,
+    to_time character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.restaurant_slot_timing OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 39216)
+-- Name: restaurant_slot_timing_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.restaurant_slot_timing_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.restaurant_slot_timing_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3755 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: restaurant_slot_timing_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.restaurant_slot_timing_id_seq OWNED BY public.restaurant_slot_timing.id;
+
+
+--
+-- TOC entry 226 (class 1259 OID 38789)
+-- Name: schedule_order_management; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.schedule_order_management (
+    id integer NOT NULL,
+    delivery_date character varying(255) NOT NULL,
+    delivery_time character varying(255) NOT NULL,
+    total double precision,
+    order_instruction character varying(255) NOT NULL,
+    deliver_to character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    cancelled_at timestamp without time zone DEFAULT now() NOT NULL,
+    "dealerId" integer,
+    delivery_status character varying(255) DEFAULT 'pending'::character varying NOT NULL,
+    modified_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.schedule_order_management OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 38788)
+-- Name: schedule_order_management_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.schedule_order_management_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+    CYCLE;
+
+
+ALTER TABLE public.schedule_order_management_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3756 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: schedule_order_management_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.schedule_order_management_id_seq OWNED BY public.schedule_order_management.id;
+
+
+--
+-- TOC entry 232 (class 1259 OID 39166)
+-- Name: user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."user" (
+    userid integer NOT NULL,
+    "fullName" character varying(255),
+    address character varying(255),
+    city character varying(255),
+    pincode bigint,
+    dob character varying,
+    mobileno bigint NOT NULL,
+    otp integer,
+    emailid character varying(255),
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    fcmtoken character varying(300)
+);
+
+
+ALTER TABLE public."user" OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 39165)
+-- Name: user_userid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_userid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_userid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3757 (class 0 OID 0)
+-- Dependencies: 231
+-- Name: user_userid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_userid_seq OWNED BY public."user".userid;
+
+
+--
+-- TOC entry 3366 (class 2604 OID 29880)
+-- Name: admin_info id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_info ALTER COLUMN id SET DEFAULT nextval('public.admin_info_id_seq'::regclass);
+
+
+--
+-- TOC entry 3367 (class 2604 OID 29926)
+-- Name: admin_notification id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_notification ALTER COLUMN id SET DEFAULT nextval('public.admin_notification_id_seq'::regclass);
+
+
+--
+-- TOC entry 3390 (class 2604 OID 39985)
+-- Name: agent id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.agent ALTER COLUMN id SET DEFAULT nextval('public.agent_id_seq'::regclass);
+
+
+--
+-- TOC entry 3389 (class 2604 OID 39686)
+-- Name: category id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category ALTER COLUMN id SET DEFAULT nextval('public.category_id_seq'::regclass);
+
+
+--
+-- TOC entry 3353 (class 2604 OID 26874)
+-- Name: dealer_entity id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_entity ALTER COLUMN id SET DEFAULT nextval('public.dealer_entity_id_seq'::regclass);
+
+
+--
+-- TOC entry 3369 (class 2604 OID 29994)
+-- Name: dealer_managestaff id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_managestaff ALTER COLUMN id SET DEFAULT nextval('public.dealer_managestaff_id_seq'::regclass);
+
+
+--
+-- TOC entry 3363 (class 2604 OID 27499)
+-- Name: dealer_menu id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu ALTER COLUMN id SET DEFAULT nextval('public.dealer_menu_id_seq'::regclass);
+
+
+--
+-- TOC entry 3375 (class 2604 OID 38410)
+-- Name: dealer_notifications id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_notifications ALTER COLUMN id SET DEFAULT nextval('public.dealer_notifications_id_seq'::regclass);
+
+
+--
+-- TOC entry 3373 (class 2604 OID 30189)
+-- Name: dealer_to_admin_complient id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_to_admin_complient ALTER COLUMN id SET DEFAULT nextval('public.dealer_to_admin_complient_id_seq'::regclass);
+
+
+--
+-- TOC entry 3405 (class 2604 OID 42108)
+-- Name: order_item id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_item ALTER COLUMN id SET DEFAULT nextval('public.order_item_id_seq'::regclass);
+
+
+--
+-- TOC entry 3399 (class 2604 OID 42094)
+-- Name: order_management id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_management ALTER COLUMN id SET DEFAULT nextval('public.order_management_id_seq'::regclass);
+
+
+--
+-- TOC entry 3385 (class 2604 OID 39160)
+-- Name: otp id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.otp ALTER COLUMN id SET DEFAULT nextval('public.otp_id_seq'::regclass);
+
+
+--
+-- TOC entry 3382 (class 2604 OID 39029)
+-- Name: payment transcationid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.payment ALTER COLUMN transcationid SET DEFAULT nextval('public.payment_transcationid_seq'::regclass);
+
+
+--
+-- TOC entry 3395 (class 2604 OID 40894)
+-- Name: product_add_on id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_add_on ALTER COLUMN id SET DEFAULT nextval('public.product_add_on_id_seq'::regclass);
+
+
+--
+-- TOC entry 3398 (class 2604 OID 41542)
+-- Name: product_customization id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_customization ALTER COLUMN id SET DEFAULT nextval('public.product_customization_id_seq'::regclass);
+
+
+--
+-- TOC entry 3393 (class 2604 OID 40851)
+-- Name: product_rating id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_rating ALTER COLUMN id SET DEFAULT nextval('public.product_rating_id_seq'::regclass);
+
+
+--
+-- TOC entry 3397 (class 2604 OID 40925)
+-- Name: product_tag id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_tag ALTER COLUMN id SET DEFAULT nextval('public.product_tag_id_seq'::regclass);
+
+
+--
+-- TOC entry 3396 (class 2604 OID 40916)
+-- Name: products_ingredient id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products_ingredient ALTER COLUMN id SET DEFAULT nextval('public.products_ingredient_id_seq'::regclass);
+
+
+--
+-- TOC entry 3365 (class 2604 OID 27608)
+-- Name: promo_offers id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.promo_offers ALTER COLUMN id SET DEFAULT nextval('public.promo_offers_id_seq'::regclass);
+
+
+--
+-- TOC entry 3394 (class 2604 OID 40858)
+-- Name: rating id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rating ALTER COLUMN id SET DEFAULT nextval('public.rating_id_seq'::regclass);
+
+
+--
+-- TOC entry 3388 (class 2604 OID 39220)
+-- Name: restaurant_slot_timing id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.restaurant_slot_timing ALTER COLUMN id SET DEFAULT nextval('public.restaurant_slot_timing_id_seq'::regclass);
+
+
+--
+-- TOC entry 3377 (class 2604 OID 38792)
+-- Name: schedule_order_management id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.schedule_order_management ALTER COLUMN id SET DEFAULT nextval('public.schedule_order_management_id_seq'::regclass);
+
+
+--
+-- TOC entry 3386 (class 2604 OID 39169)
+-- Name: user userid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user" ALTER COLUMN userid SET DEFAULT nextval('public.user_userid_seq'::regclass);
+
+
+--
+-- TOC entry 3683 (class 0 OID 29877)
+-- Dependencies: 216
+-- Data for Name: admin_info; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.admin_info (id, username, mobile, email) FROM stdin;
+1	nages	6369023576	eslak231@gmail.com
+\.
+
+
+--
+-- TOC entry 3685 (class 0 OID 29923)
+-- Dependencies: 218
+-- Data for Name: admin_notification; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.admin_notification (id, created_at, "dealerId", "adminId", message, title) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3705 (class 0 OID 39982)
+-- Dependencies: 238
+-- Data for Name: agent; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.agent (id, name, address, mobile, created_at, is_active, fcmtoken) FROM stdin;
+1	nageswaran	205,sivakasi	6369023586	2024-03-25 12:23:32.810904	t	\N
+2	kaleeswaran	16,pillaiyar kovil street,sivakasi	7635673456	2024-03-25 12:24:19.194197	t	\N
+3	kaleeswaran	79,pillaiyar kovil street,sivakasi	6786381262	2024-03-25 12:25:02.490787	t	\N
+\.
+
+
+--
+-- TOC entry 3703 (class 0 OID 39683)
+-- Dependencies: 236
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.category (id, type, preference, "dealermenuId", category, cuisine, meal_type) FROM stdin;
+4	food	spicy	7	{veg,nonveg}	{southindian,Northindian}	{lunch,evening}
+5	food	medium	8	{veg,veg}	{southindian,Northindian}	{breakfast}
+6	food	spicy	9	{nonveg}	{southindian,Northindian}	{dinner}
+7	food	spicy	10	{nonveg}	{southindian,Northindian}	{dinner}
+8	food	spicy	11	{nonveg}	{southindian,Northindian}	{dinner}
+\.
+
+
+--
+-- TOC entry 3677 (class 0 OID 26871)
+-- Dependencies: 210
+-- Data for Name: dealer_entity; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_entity (id, restaurant_name, restaurant_type, restaurant_category, restaurant_mobileno, restaurant_address, username, password, user_address, user_mobile, emailid, opens_at, closes_at, days_available, latitude, longitude, is_active, no_pan, name_pan, address_pan, no_gst, no_fssai, images, reset, expdate_fssai, created_at, cuisine, ratings, role, rush_hour, schedule, takeaway, dinning, delivery, schedule_order, fcmtoken) FROM stdin;
+3	AppansInn	hotel	nonveg	6369024569	  Town, Police Station Rd, Parasakthi Colony, Sivakasi	kaleeswaran	$2b$12$FcbgDVm.wb2nV9ipIwmWrO5Zdna.DsplR.lFvjjlCdwvktYJ43N.m	Municipality Office, Town, Police Station Rd, Parasakthi Colony, Sivakasi, Tamil Nadu 626123	7369024569	kaleeswaran102000@gmail.com	6:33	16	sunday,Monday	9.4533° N	77.8024° E	t	ABCTY1234D	KaleeswaranR	Municipality Office,  Town, Police Station Rd, Parasakthi Colony, Sivakasi 	33AAACR4849R2AA	11217303000066	https://i.ytimg.com/vi/EyQHkY8XfsM/maxresdefault.jpg	\N	10-02-2026	2024-04-10 12:53:59.894971	southindian	\N	admin	f	f	f	f	t	t	\N
+2	vijayammess	hotel	nonveg	7945679124	16,pillaiyarkovil street	nageswaran	$2b$12$B0WqUK0H98LXtlOWciJv8Olt.fKk20dpDHdKo3S/u1tSvwUTsjdpS	16,pillaiyarkovil street	7125326850	nageswaran102000@gmail.com	6:33	16	sunday,Monday	9.4533° N	77.8024° E	t	ABCTY1234D	NageswaranR	16,pillaiyarkovil street	33AAACR4849R2ZR	11217303000066	https://i.ytimg.com/vi/EyQHkY8XfsM/maxresdefault.jpg	\N	10-02-2026	2024-04-09 18:28:34.105378	southindian	\N	admin	f	f	f	f	t	t	\N
+1	nainaBriyaniKadai	hotel	veg	7915326794	205,sivakasi	Vigneshkumar	$2b$12$arkkcQphmzX6ETNY.zV7duVOeXKCOpU3846z0Xfj2q/t63qi81aZq	205,sivakasi	7125326874	Vigneshkumar102000@gmail.com	11:11	11	sunday,Monday,Tuesday	9.4533° N	77.8024° E	t	ABCTY1234D	Vigneshkumar	205,sivakasi	33AAACR4849R2AB	11217303000066	https://i.ytimg.com/vi/EyQHkY8XfsM/maxresdefault.jpg	\N	2024-04-22	2024-03-21 16:33:54.579439	southIndian	NaN	admin	f	f	f	f	t	t	czU8nC3cQLCxxaT47IXaXo:APA91bGQ74rd_8wtz3hfK1oUP_oPob4vTVtt7fUsicf3gZdqgZaE2u2s3rMHEdyjmk5GUMHHWDF7BJhvPuKs8axfpaucYUigpoNwWqJIuIjeB8maum33xcPFdKn-zj7y-HXnzGAkWeQQ
+4	HamzaBriyani	food	nonveg	7639210071	79,pillaiyarkovil st,sivakasi	Rameshkumar	$2b$12$9GfSki7ArwLUyAiAQK/WkuiM.e0XDVfvuauONN65k/1SfKDPTD9Mm	79,pillaiyarkovil st,sivakasi	9674521436	ramesh@gmail.com	11:53	22	sunday,monday,tuesday,wednesday	9.4533° N	77.8024° E	t	ABCTY1234D	rameshkumar	205,sivakasi	33AAACR4849R2AB	11217303000066	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/dealer/images/1656480d5f.jpeg	\N	10-02-2026	2024-04-11 18:16:26.466281	northiindian	\N	admin	f	f	f	f	t	t	\N
+\.
+
+
+--
+-- TOC entry 3687 (class 0 OID 29991)
+-- Dependencies: 220
+-- Data for Name: dealer_managestaff; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_managestaff (id, name, mobile, role, created_at, is_active, "dealerId") FROM stdin;
+5	kumar	9745635422	employee	2024-04-10 14:04:47.631847	t	\N
+3	kumar	9745635422	employee	2024-04-10 13:53:14.304903	t	2
+8	vinoth	9745635672	employee	2024-04-11 17:04:36.479949	t	1
+\.
+
+
+--
+-- TOC entry 3679 (class 0 OID 27496)
+-- Dependencies: 212
+-- Data for Name: dealer_menu; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_menu (id, name, price, is_available, images, "dealerId", ratings, "desc", spicylevel, servepeople, gst, packagecharge, shorts) FROM stdin;
+7	briyani	150	t	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/images/28bcbb10c46.jpeg	1	\N	Biryani contains more gravy, and is often cooked longer, leaving the meat (and vegetables, if present) more tender, and the rice more flavoured	medium	2	20	\N	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/shorts/eecbacf878.mp4
+8	poori	35	t	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/images/d6a51089e3d.jpeg	1	\N	Puri, also poori, is a type of deep-fried bread, made from unleavened whole-wheat flour, originated from the Indian subcontinent	medium	1	5	\N	\N
+9	grill	200	t	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/images/5726ff102b2.jpeg	1	\N	Grilled Chicken is a very popular recipe made with chicken, hung curd and spices like cumin powder and black pepper.	high	2	10	\N	\N
+10	grill	200	t	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/images/f23994bed9.jpeg	1	\N	Grilled Chicken is a very popular recipe made with chicken, hung curd and spices like cumin powder and black pepper.	high	2	10	\N	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/shorts/5d913c3a1e.mp4
+11	grill	200	t	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/images/52e939ad6d.jpeg	1	\N	Grilled Chicken is a very popular recipe made with chicken, hung curd and spices like cumin powder and black pepper.	high	2	10	\N	/home/aiimtech05/projects/officework-multiauth/officeworkV1/officework/assets/shorts/f4454c6d99.mp4
+\.
+
+
+--
+-- TOC entry 3716 (class 0 OID 41055)
+-- Dependencies: 249
+-- Data for Name: dealer_menu_addons_product_add_on; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_menu_addons_product_add_on ("dealerMenuId", "productAddOnId") FROM stdin;
+7	3
+8	3
+9	3
+10	3
+11	3
+\.
+
+
+--
+-- TOC entry 3721 (class 0 OID 41554)
+-- Dependencies: 254
+-- Data for Name: dealer_menu_customization_product_customization; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_menu_customization_product_customization ("dealerMenuId", "productCustomizationId") FROM stdin;
+11	1
+11	2
+\.
+
+
+--
+-- TOC entry 3718 (class 0 OID 41133)
+-- Dependencies: 251
+-- Data for Name: dealer_menu_foodtag_product_tag; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_menu_foodtag_product_tag ("dealerMenuId", "productTagId") FROM stdin;
+7	3
+8	3
+9	3
+10	3
+11	3
+\.
+
+
+--
+-- TOC entry 3717 (class 0 OID 41099)
+-- Dependencies: 250
+-- Data for Name: dealer_menu_ingredient_products_ingredient; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_menu_ingredient_products_ingredient ("dealerMenuId", "productsIngredientId") FROM stdin;
+7	1
+7	2
+8	1
+8	2
+9	1
+9	2
+10	1
+10	2
+11	1
+11	2
+\.
+
+
+--
+-- TOC entry 3691 (class 0 OID 38407)
+-- Dependencies: 224
+-- Data for Name: dealer_notifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_notifications (id, "dealerId", reason, created_at, timetake) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3689 (class 0 OID 30186)
+-- Dependencies: 222
+-- Data for Name: dealer_to_admin_complient; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dealer_to_admin_complient (id, title, message, created_at, "dealerId", "adminId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3729 (class 0 OID 42105)
+-- Dependencies: 262
+-- Data for Name: order_item; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.order_item (id, item_qty, "orderId", "productId", "scheduleOrderId") FROM stdin;
+1	2	1	8	\N
+2	1	1	7	\N
+3	2	2	8	\N
+4	2	3	8	\N
+5	2	4	8	\N
+6	2	5	8	\N
+7	2	6	8	\N
+8	2	7	8	\N
+9	2	8	8	\N
+10	2	9	8	\N
+11	1	10	8	\N
+12	1	10	9	\N
+13	1	11	8	\N
+14	1	11	9	\N
+\.
+
+
+--
+-- TOC entry 3727 (class 0 OID 42091)
+-- Dependencies: 260
+-- Data for Name: order_management; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.order_management (id, deliverystatus, total, created_at, cancelled_at, preorder, schedule_date, schedule_time, modified_at, order_instruction, deliver_to, "cancelledBy", cancellation, preparation_time, "dealerId", userid, "agentId") FROM stdin;
+2	dealer accepted	70	2024-04-06 10:10:00.430451	2024-04-06 10:10:00.430451	f	\N	\N	2024-04-06 10:10:00.430451	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+1	agent accepted	220	2024-04-06 10:08:46.781562	2024-04-06 10:08:46.781562	f	\N	\N	2024-04-06 10:08:46.781562	deliver on the mentioned time	\N	\N	f	\N	1	5	3
+3	pending	0	2024-04-09 11:45:28.767911	2024-04-09 11:45:28.767911	f	\N	\N	2024-04-09 11:45:28.767911	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+4	pending	0	2024-04-09 11:46:07.599706	2024-04-09 11:46:07.599706	f	\N	\N	2024-04-09 11:46:07.599706	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+5	pending	0	2024-04-09 11:46:54.44633	2024-04-09 11:46:54.44633	f	\N	\N	2024-04-09 11:46:54.44633	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+6	pending	350	2024-04-09 11:48:41.772674	2024-04-09 11:48:41.772674	f	\N	\N	2024-04-09 11:48:41.772674	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+7	pending	350	2024-04-09 11:49:43.602817	2024-04-09 11:49:43.602817	f	\N	\N	2024-04-09 11:49:43.602817	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+8	pending	350	2024-04-09 11:57:43.785909	2024-04-09 11:57:43.785909	f	\N	\N	2024-04-09 11:57:43.785909	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+9	pending	75	2024-04-09 12:12:14.658346	2024-04-09 12:12:14.658346	f	\N	\N	2024-04-09 12:12:14.658346	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+11	pending	250	2024-04-09 18:00:14.671394	2024-04-09 18:00:14.671394	f	\N	\N	2024-04-09 18:00:14.671394	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+10	dealer accepted	250	2024-04-09 17:54:24.605473	2024-04-09 17:54:24.605473	f	\N	\N	2024-04-09 17:54:24.605473	deliver on the mentioned time	\N	\N	f	\N	1	5	\N
+\.
+
+
+--
+-- TOC entry 3697 (class 0 OID 39157)
+-- Dependencies: 230
+-- Data for Name: otp; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.otp (id, otp) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3695 (class 0 OID 39026)
+-- Dependencies: 228
+-- Data for Name: payment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.payment (transcationid, payment_method, amount, payment_status, created_at, updated_at, "orderId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3711 (class 0 OID 40891)
+-- Dependencies: 244
+-- Data for Name: product_add_on; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_add_on (id, name, price, "dealerId") FROM stdin;
+1	maiyonnaise	20	1
+2	greenmaiyonnaise	20	1
+3	halwa	25	1
+\.
+
+
+--
+-- TOC entry 3722 (class 0 OID 41582)
+-- Dependencies: 255
+-- Data for Name: product_add_on_product_dealer_menu; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_add_on_product_dealer_menu ("productAddOnId", "dealerMenuId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3720 (class 0 OID 41539)
+-- Dependencies: 253
+-- Data for Name: product_customization; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_customization (id, name, price, "dealerId") FROM stdin;
+1	Half	200	1
+2	full	350	1
+3	single	150	1
+4	bucket	1250	1
+\.
+
+
+--
+-- TOC entry 3725 (class 0 OID 41603)
+-- Dependencies: 258
+-- Data for Name: product_customization_product_dealer_menu; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_customization_product_dealer_menu ("productCustomizationId", "dealerMenuId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3707 (class 0 OID 40848)
+-- Dependencies: 240
+-- Data for Name: product_rating; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_rating (id, product_star, comments, "ratingId", "productId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3715 (class 0 OID 40922)
+-- Dependencies: 248
+-- Data for Name: product_tag; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_tag (id, name, "dealerId") FROM stdin;
+1	morning special	1
+2	double damaka	1
+3	today's special	1
+\.
+
+
+--
+-- TOC entry 3724 (class 0 OID 41596)
+-- Dependencies: 257
+-- Data for Name: product_tag_product_dealer_menu; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_tag_product_dealer_menu ("productTagId", "dealerMenuId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3713 (class 0 OID 40913)
+-- Dependencies: 246
+-- Data for Name: products_ingredient; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products_ingredient (id, name, "dealerId") FROM stdin;
+1	pepper	1
+2	chicken	1
+3	brinjal	1
+4	onion	1
+5	chilli	1
+\.
+
+
+--
+-- TOC entry 3723 (class 0 OID 41589)
+-- Dependencies: 256
+-- Data for Name: products_ingredient_product_dealer_menu; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products_ingredient_product_dealer_menu ("productsIngredientId", "dealerMenuId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3681 (class 0 OID 27605)
+-- Dependencies: 214
+-- Data for Name: promo_offers; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.promo_offers (id, promoname, coupon_code, description, instruction, "dealerId", provider) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3709 (class 0 OID 40855)
+-- Dependencies: 242
+-- Data for Name: rating; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rating (id, dealer_star, comments, complient, "dealerId", "userUserid", "orderId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3701 (class 0 OID 39217)
+-- Dependencies: 234
+-- Data for Name: restaurant_slot_timing; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.restaurant_slot_timing (id, "dealerId", from_time, to_time) FROM stdin;
+4	1	05:25	07:32
+\.
+
+
+--
+-- TOC entry 3693 (class 0 OID 38789)
+-- Dependencies: 226
+-- Data for Name: schedule_order_management; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.schedule_order_management (id, delivery_date, delivery_time, total, order_instruction, deliver_to, created_at, cancelled_at, "dealerId", delivery_status, modified_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3699 (class 0 OID 39166)
+-- Dependencies: 232
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."user" (userid, "fullName", address, city, pincode, dob, mobileno, otp, emailid, created_at, fcmtoken) FROM stdin;
+5	\N	\N	\N	\N	\N	9876543210	1096	\N	2024-04-04 12:08:00.655074	czU8nC3cQLCxxaT47IXaXo:APA91bGQ74rd_8wtz3hfK1oUP_oPob4vTVtt7fUsicf3gZdqgZaE2u2s3rMHEdyjmk5GUMHHWDF7BJhvPuKs8axfpaucYUigpoNwWqJIuIjeB8maum33xcPFdKn-zj7y-HXnzGAkWeQQ
+4	\N	\N	\N	\N	\N	1234567890	9980	\N	2024-04-02 12:33:31.936456	\N
+\.
+
+
+--
+-- TOC entry 3758 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: admin_info_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.admin_info_id_seq', 1, true);
+
+
+--
+-- TOC entry 3759 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: admin_notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.admin_notification_id_seq', 2, true);
+
+
+--
+-- TOC entry 3760 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: agent_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.agent_id_seq', 3, true);
+
+
+--
+-- TOC entry 3761 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.category_id_seq', 8, true);
+
+
+--
+-- TOC entry 3762 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: dealer_entity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.dealer_entity_id_seq', 1, false);
+
+
+--
+-- TOC entry 3763 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: dealer_managestaff_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.dealer_managestaff_id_seq', 9, true);
+
+
+--
+-- TOC entry 3764 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: dealer_menu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.dealer_menu_id_seq', 11, true);
+
+
+--
+-- TOC entry 3765 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: dealer_notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.dealer_notifications_id_seq', 1, false);
+
+
+--
+-- TOC entry 3766 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: dealer_to_admin_complient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.dealer_to_admin_complient_id_seq', 2, true);
+
+
+--
+-- TOC entry 3767 (class 0 OID 0)
+-- Dependencies: 261
+-- Name: order_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.order_item_id_seq', 14, true);
+
+
+--
+-- TOC entry 3768 (class 0 OID 0)
+-- Dependencies: 259
+-- Name: order_management_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.order_management_id_seq', 11, true);
+
+
+--
+-- TOC entry 3769 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: otp_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.otp_id_seq', 1, false);
+
+
+--
+-- TOC entry 3770 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: payment_transcationid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.payment_transcationid_seq', 1, false);
+
+
+--
+-- TOC entry 3771 (class 0 OID 0)
+-- Dependencies: 243
+-- Name: product_add_on_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.product_add_on_id_seq', 3, true);
+
+
+--
+-- TOC entry 3772 (class 0 OID 0)
+-- Dependencies: 252
+-- Name: product_customization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.product_customization_id_seq', 4, true);
+
+
+--
+-- TOC entry 3773 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: product_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.product_rating_id_seq', 1, false);
+
+
+--
+-- TOC entry 3774 (class 0 OID 0)
+-- Dependencies: 247
+-- Name: product_tag_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.product_tag_id_seq', 3, true);
+
+
+--
+-- TOC entry 3775 (class 0 OID 0)
+-- Dependencies: 245
+-- Name: products_ingredient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.products_ingredient_id_seq', 5, true);
+
+
+--
+-- TOC entry 3776 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: promo_offers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.promo_offers_id_seq', 20, true);
+
+
+--
+-- TOC entry 3777 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rating_id_seq', 1, false);
+
+
+--
+-- TOC entry 3778 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: restaurant_slot_timing_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.restaurant_slot_timing_id_seq', 4, true);
+
+
+--
+-- TOC entry 3779 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: schedule_order_management_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.schedule_order_management_id_seq', 5, true);
+
+
+--
+-- TOC entry 3780 (class 0 OID 0)
+-- Dependencies: 231
+-- Name: user_userid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_userid_seq', 5, true);
+
+
+--
+-- TOC entry 3413 (class 2606 OID 29884)
+-- Name: admin_info PK_07362e5e3eddbdddb3f3c30484f; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_info
+    ADD CONSTRAINT "PK_07362e5e3eddbdddb3f3c30484f" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3443 (class 2606 OID 39991)
+-- Name: agent PK_1000e989398c5d4ed585cf9a46f; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.agent
+    ADD CONSTRAINT "PK_1000e989398c5d4ed585cf9a46f" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3453 (class 2606 OID 40929)
+-- Name: product_tag PK_1439455c6528caa94fcc8564fda; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_tag
+    ADD CONSTRAINT "PK_1439455c6528caa94fcc8564fda" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3489 (class 2606 OID 42103)
+-- Name: order_management PK_29d528b9ae9c66c4e831768eb12; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_management
+    ADD CONSTRAINT "PK_29d528b9ae9c66c4e831768eb12" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3431 (class 2606 OID 39162)
+-- Name: otp PK_32556d9d7b22031d7d0e1fd6723; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.otp
+    ADD CONSTRAINT "PK_32556d9d7b22031d7d0e1fd6723" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3465 (class 2606 OID 41137)
+-- Name: dealer_menu_foodtag_product_tag PK_34719d9e81625f1bc28c2defcd8; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_foodtag_product_tag
+    ADD CONSTRAINT "PK_34719d9e81625f1bc28c2defcd8" PRIMARY KEY ("dealerMenuId", "productTagId");
+
+
+--
+-- TOC entry 3427 (class 2606 OID 39035)
+-- Name: payment PK_454d230c79687b004721a2b76eb; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT "PK_454d230c79687b004721a2b76eb" PRIMARY KEY (transcationid);
+
+
+--
+-- TOC entry 3419 (class 2606 OID 29996)
+-- Name: dealer_managestaff PK_4dfcb5492fd0e69e35485178435; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_managestaff
+    ADD CONSTRAINT "PK_4dfcb5492fd0e69e35485178435" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3467 (class 2606 OID 41546)
+-- Name: product_customization PK_50c2d246a8232b656d9698082c6; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_customization
+    ADD CONSTRAINT "PK_50c2d246a8232b656d9698082c6" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3439 (class 2606 OID 39224)
+-- Name: restaurant_slot_timing PK_5d30560b733153dacae5e981365; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.restaurant_slot_timing
+    ADD CONSTRAINT "PK_5d30560b733153dacae5e981365" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3475 (class 2606 OID 41586)
+-- Name: product_add_on_product_dealer_menu PK_6191648e3a27cfc41d16c29965f; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_add_on_product_dealer_menu
+    ADD CONSTRAINT "PK_6191648e3a27cfc41d16c29965f" PRIMARY KEY ("productAddOnId", "dealerMenuId");
+
+
+--
+-- TOC entry 3423 (class 2606 OID 38414)
+-- Name: dealer_notifications PK_6a346fcf2ced3f8f7360238d56e; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_notifications
+    ADD CONSTRAINT "PK_6a346fcf2ced3f8f7360238d56e" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3433 (class 2606 OID 39174)
+-- Name: user PK_755ac9fbd440bc9b97fe9532108; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "PK_755ac9fbd440bc9b97fe9532108" PRIMARY KEY (userid);
+
+
+--
+-- TOC entry 3483 (class 2606 OID 41600)
+-- Name: product_tag_product_dealer_menu PK_788a628d063817f27f01751f283; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_tag_product_dealer_menu
+    ADD CONSTRAINT "PK_788a628d063817f27f01751f283" PRIMARY KEY ("productTagId", "dealerMenuId");
+
+
+--
+-- TOC entry 3409 (class 2606 OID 27504)
+-- Name: dealer_menu PK_79e852da05bc261694cb38ddd94; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu
+    ADD CONSTRAINT "PK_79e852da05bc261694cb38ddd94" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3479 (class 2606 OID 41593)
+-- Name: products_ingredient_product_dealer_menu PK_8626a6d807e6a54321e024b77b2; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products_ingredient_product_dealer_menu
+    ADD CONSTRAINT "PK_8626a6d807e6a54321e024b77b2" PRIMARY KEY ("productsIngredientId", "dealerMenuId");
+
+
+--
+-- TOC entry 3457 (class 2606 OID 41059)
+-- Name: dealer_menu_addons_product_add_on PK_905a5614359b3814feea478b768; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_addons_product_add_on
+    ADD CONSTRAINT "PK_905a5614359b3814feea478b768" PRIMARY KEY ("dealerMenuId", "productAddOnId");
+
+
+--
+-- TOC entry 3487 (class 2606 OID 41607)
+-- Name: product_customization_product_dealer_menu PK_92e043c1e0d8dbbc6442d69e946; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_customization_product_dealer_menu
+    ADD CONSTRAINT "PK_92e043c1e0d8dbbc6442d69e946" PRIMARY KEY ("productCustomizationId", "dealerMenuId");
+
+
+--
+-- TOC entry 3441 (class 2606 OID 39690)
+-- Name: category PK_9c4e4a89e3674fc9f382d733f03; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT "PK_9c4e4a89e3674fc9f382d733f03" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3445 (class 2606 OID 40853)
+-- Name: product_rating PK_bd51c42005b46e0db79b10cef19; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_rating
+    ADD CONSTRAINT "PK_bd51c42005b46e0db79b10cef19" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3449 (class 2606 OID 40896)
+-- Name: product_add_on PK_c4e1909a15d077719bdedd84358; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_add_on
+    ADD CONSTRAINT "PK_c4e1909a15d077719bdedd84358" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3471 (class 2606 OID 41558)
+-- Name: dealer_menu_customization_product_customization PK_c50fdce54ad795aa9b6413e6273; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_customization_product_customization
+    ADD CONSTRAINT "PK_c50fdce54ad795aa9b6413e6273" PRIMARY KEY ("dealerMenuId", "productCustomizationId");
+
+
+--
+-- TOC entry 3491 (class 2606 OID 42110)
+-- Name: order_item PK_d01158fe15b1ead5c26fd7f4e90; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_item
+    ADD CONSTRAINT "PK_d01158fe15b1ead5c26fd7f4e90" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3417 (class 2606 OID 29946)
+-- Name: admin_notification PK_d0e228b0be64aedd7ad1ca97588; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_notification
+    ADD CONSTRAINT "PK_d0e228b0be64aedd7ad1ca97588" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3451 (class 2606 OID 40920)
+-- Name: products_ingredient PK_d707502078bde96cbac928cdcfc; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products_ingredient
+    ADD CONSTRAINT "PK_d707502078bde96cbac928cdcfc" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3425 (class 2606 OID 38798)
+-- Name: schedule_order_management PK_db27a23653c5d3e72b2756c6c14; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.schedule_order_management
+    ADD CONSTRAINT "PK_db27a23653c5d3e72b2756c6c14" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3461 (class 2606 OID 41103)
+-- Name: dealer_menu_ingredient_products_ingredient PK_ebdbce9d531f260f16e873334c5; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_ingredient_products_ingredient
+    ADD CONSTRAINT "PK_ebdbce9d531f260f16e873334c5" PRIMARY KEY ("dealerMenuId", "productsIngredientId");
+
+
+--
+-- TOC entry 3447 (class 2606 OID 40862)
+-- Name: rating PK_ecda8ad32645327e4765b43649e; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rating
+    ADD CONSTRAINT "PK_ecda8ad32645327e4765b43649e" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3421 (class 2606 OID 30194)
+-- Name: dealer_to_admin_complient PK_f944fb3e6041dd03101c2b91b36; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_to_admin_complient
+    ADD CONSTRAINT "PK_f944fb3e6041dd03101c2b91b36" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3435 (class 2606 OID 39176)
+-- Name: user UQ_7d54776d039add7271c8eb15fb9; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "UQ_7d54776d039add7271c8eb15fb9" UNIQUE (mobileno);
+
+
+--
+-- TOC entry 3415 (class 2606 OID 29900)
+-- Name: admin_info UQ_82893c75720dd76319d36d73e2b; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_info
+    ADD CONSTRAINT "UQ_82893c75720dd76319d36d73e2b" UNIQUE (username);
+
+
+--
+-- TOC entry 3437 (class 2606 OID 39178)
+-- Name: user UQ_90ecc4901d34ca3acdb75646a52; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "UQ_90ecc4901d34ca3acdb75646a52" UNIQUE (emailid);
+
+
+--
+-- TOC entry 3429 (class 2606 OID 40814)
+-- Name: payment UQ_d09d285fe1645cd2f0db811e293; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT "UQ_d09d285fe1645cd2f0db811e293" UNIQUE ("orderId");
+
+
+--
+-- TOC entry 3407 (class 2606 OID 26880)
+-- Name: dealer_entity dealer_entity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_entity
+    ADD CONSTRAINT dealer_entity_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3411 (class 2606 OID 27612)
+-- Name: promo_offers promo_offers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.promo_offers
+    ADD CONSTRAINT promo_offers_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3462 (class 1259 OID 41139)
+-- Name: IDX_0b7b56462f803d714ca176f0cb; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_0b7b56462f803d714ca176f0cb" ON public.dealer_menu_foodtag_product_tag USING btree ("productTagId");
+
+
+--
+-- TOC entry 3484 (class 1259 OID 41608)
+-- Name: IDX_22176a0fb408d6f260d5de47e3; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_22176a0fb408d6f260d5de47e3" ON public.product_customization_product_dealer_menu USING btree ("productCustomizationId");
+
+
+--
+-- TOC entry 3463 (class 1259 OID 41138)
+-- Name: IDX_24697b1a5ce742dd2d1d170a3d; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_24697b1a5ce742dd2d1d170a3d" ON public.dealer_menu_foodtag_product_tag USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3485 (class 1259 OID 41609)
+-- Name: IDX_2d03db2af36446554876cc532b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_2d03db2af36446554876cc532b" ON public.product_customization_product_dealer_menu USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3458 (class 1259 OID 41104)
+-- Name: IDX_48cddabafe421ca0588cf783ed; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_48cddabafe421ca0588cf783ed" ON public.dealer_menu_ingredient_products_ingredient USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3468 (class 1259 OID 41560)
+-- Name: IDX_718367a04d33ac61adcb5db8e0; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_718367a04d33ac61adcb5db8e0" ON public.dealer_menu_customization_product_customization USING btree ("productCustomizationId");
+
+
+--
+-- TOC entry 3454 (class 1259 OID 41061)
+-- Name: IDX_71dce5d7075e7e24547fba080e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_71dce5d7075e7e24547fba080e" ON public.dealer_menu_addons_product_add_on USING btree ("productAddOnId");
+
+
+--
+-- TOC entry 3480 (class 1259 OID 41601)
+-- Name: IDX_73d7e7382a865bfb722278920a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_73d7e7382a865bfb722278920a" ON public.product_tag_product_dealer_menu USING btree ("productTagId");
+
+
+--
+-- TOC entry 3476 (class 1259 OID 41595)
+-- Name: IDX_7add5334085056a576888a3500; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_7add5334085056a576888a3500" ON public.products_ingredient_product_dealer_menu USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3472 (class 1259 OID 41588)
+-- Name: IDX_9aeff4c697a3a67310fef49143; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_9aeff4c697a3a67310fef49143" ON public.product_add_on_product_dealer_menu USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3459 (class 1259 OID 41105)
+-- Name: IDX_9ea09ef57febf224e9c394b525; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_9ea09ef57febf224e9c394b525" ON public.dealer_menu_ingredient_products_ingredient USING btree ("productsIngredientId");
+
+
+--
+-- TOC entry 3469 (class 1259 OID 41559)
+-- Name: IDX_ad46fa37398f34580c6e2ee7db; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_ad46fa37398f34580c6e2ee7db" ON public.dealer_menu_customization_product_customization USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3473 (class 1259 OID 41587)
+-- Name: IDX_b1ad13f8337a3295ccbd6528fa; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_b1ad13f8337a3295ccbd6528fa" ON public.product_add_on_product_dealer_menu USING btree ("productAddOnId");
+
+
+--
+-- TOC entry 3455 (class 1259 OID 41060)
+-- Name: IDX_be252517ff161a8ff3a8c14f0e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_be252517ff161a8ff3a8c14f0e" ON public.dealer_menu_addons_product_add_on USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3481 (class 1259 OID 41602)
+-- Name: IDX_c90a1a7266d7f870395936b7af; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_c90a1a7266d7f870395936b7af" ON public.product_tag_product_dealer_menu USING btree ("dealerMenuId");
+
+
+--
+-- TOC entry 3477 (class 1259 OID 41594)
+-- Name: IDX_ca26b7f86e3924021af7ed0f52; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_ca26b7f86e3924021af7ed0f52" ON public.products_ingredient_product_dealer_menu USING btree ("productsIngredientId");
+
+
+--
+-- TOC entry 3536 (class 2620 OID 26921)
+-- Name: dealer_entity reset_sequence_trigger; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER reset_sequence_trigger AFTER DELETE ON public.dealer_entity FOR EACH STATEMENT EXECUTE FUNCTION public.reset_sequence();
+
+
+--
+-- TOC entry 3535 (class 2620 OID 26919)
+-- Name: dealer_entity reset_sequence_trigger_after_truncate; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER reset_sequence_trigger_after_truncate AFTER TRUNCATE ON public.dealer_entity FOR EACH STATEMENT EXECUTE FUNCTION public.reset_sequence_after_truncate();
+
+
+--
+-- TOC entry 3517 (class 2606 OID 41145)
+-- Name: dealer_menu_foodtag_product_tag FK_0b7b56462f803d714ca176f0cb5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_foodtag_product_tag
+    ADD CONSTRAINT "FK_0b7b56462f803d714ca176f0cb5" FOREIGN KEY ("productTagId") REFERENCES public.product_tag(id);
+
+
+--
+-- TOC entry 3532 (class 2606 OID 42146)
+-- Name: order_item FK_0ce27efa8fc3a63cb548b7eb751; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_item
+    ADD CONSTRAINT "FK_0ce27efa8fc3a63cb548b7eb751" FOREIGN KEY ("scheduleOrderId") REFERENCES public.schedule_order_management(id);
+
+
+--
+-- TOC entry 3511 (class 2606 OID 42085)
+-- Name: product_tag FK_1a65da49c6b832e64a51d5b660b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_tag
+    ADD CONSTRAINT "FK_1a65da49c6b832e64a51d5b660b" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3506 (class 2606 OID 42111)
+-- Name: rating FK_1b56a1a54de7bb0d0904c909870; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rating
+    ADD CONSTRAINT "FK_1b56a1a54de7bb0d0904c909870" FOREIGN KEY ("orderId") REFERENCES public.order_management(id);
+
+
+--
+-- TOC entry 3494 (class 2606 OID 29950)
+-- Name: admin_notification FK_21806001f36738185ff39ee71a7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_notification
+    ADD CONSTRAINT "FK_21806001f36738185ff39ee71a7" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3527 (class 2606 OID 41640)
+-- Name: product_customization_product_dealer_menu FK_22176a0fb408d6f260d5de47e30; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_customization_product_dealer_menu
+    ADD CONSTRAINT "FK_22176a0fb408d6f260d5de47e30" FOREIGN KEY ("productCustomizationId") REFERENCES public.product_customization(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3516 (class 2606 OID 41140)
+-- Name: dealer_menu_foodtag_product_tag FK_24697b1a5ce742dd2d1d170a3dc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_foodtag_product_tag
+    ADD CONSTRAINT "FK_24697b1a5ce742dd2d1d170a3dc" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3505 (class 2606 OID 40868)
+-- Name: product_rating FK_2b0df25b89027eb4a8be79cbb83; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_rating
+    ADD CONSTRAINT "FK_2b0df25b89027eb4a8be79cbb83" FOREIGN KEY ("productId") REFERENCES public.dealer_menu(id);
+
+
+--
+-- TOC entry 3528 (class 2606 OID 41645)
+-- Name: product_customization_product_dealer_menu FK_2d03db2af36446554876cc532be; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_customization_product_dealer_menu
+    ADD CONSTRAINT "FK_2d03db2af36446554876cc532be" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id);
+
+
+--
+-- TOC entry 3514 (class 2606 OID 41106)
+-- Name: dealer_menu_ingredient_products_ingredient FK_48cddabafe421ca0588cf783ed0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_ingredient_products_ingredient
+    ADD CONSTRAINT "FK_48cddabafe421ca0588cf783ed0" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3510 (class 2606 OID 42080)
+-- Name: products_ingredient FK_4a9f60cece5c76e8e8910dfe740; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products_ingredient
+    ADD CONSTRAINT "FK_4a9f60cece5c76e8e8910dfe740" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3529 (class 2606 OID 42121)
+-- Name: order_management FK_51017c3815e2114dd86ccf99dee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_management
+    ADD CONSTRAINT "FK_51017c3815e2114dd86ccf99dee" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3500 (class 2606 OID 38828)
+-- Name: schedule_order_management FK_57f40fea1ec834b5194c978a887; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.schedule_order_management
+    ADD CONSTRAINT "FK_57f40fea1ec834b5194c978a887" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3508 (class 2606 OID 40878)
+-- Name: rating FK_6106cafeabda573290b1fdf8f18; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rating
+    ADD CONSTRAINT "FK_6106cafeabda573290b1fdf8f18" FOREIGN KEY ("userUserid") REFERENCES public."user"(userid);
+
+
+--
+-- TOC entry 3533 (class 2606 OID 42136)
+-- Name: order_item FK_646bf9ece6f45dbe41c203e06e0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_item
+    ADD CONSTRAINT "FK_646bf9ece6f45dbe41c203e06e0" FOREIGN KEY ("orderId") REFERENCES public.order_management(id);
+
+
+--
+-- TOC entry 3530 (class 2606 OID 42126)
+-- Name: order_management FK_682959fb0f9763d41e872f323ab; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_management
+    ADD CONSTRAINT "FK_682959fb0f9763d41e872f323ab" FOREIGN KEY (userid) REFERENCES public."user"(userid);
+
+
+--
+-- TOC entry 3504 (class 2606 OID 40863)
+-- Name: product_rating FK_68990502647eb733464f52c366b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_rating
+    ADD CONSTRAINT "FK_68990502647eb733464f52c366b" FOREIGN KEY ("ratingId") REFERENCES public.rating(id);
+
+
+--
+-- TOC entry 3520 (class 2606 OID 41576)
+-- Name: dealer_menu_customization_product_customization FK_718367a04d33ac61adcb5db8e03; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_customization_product_customization
+    ADD CONSTRAINT "FK_718367a04d33ac61adcb5db8e03" FOREIGN KEY ("productCustomizationId") REFERENCES public.product_customization(id);
+
+
+--
+-- TOC entry 3513 (class 2606 OID 41077)
+-- Name: dealer_menu_addons_product_add_on FK_71dce5d7075e7e24547fba080e4; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_addons_product_add_on
+    ADD CONSTRAINT "FK_71dce5d7075e7e24547fba080e4" FOREIGN KEY ("productAddOnId") REFERENCES public.product_add_on(id);
+
+
+--
+-- TOC entry 3525 (class 2606 OID 41630)
+-- Name: product_tag_product_dealer_menu FK_73d7e7382a865bfb722278920a6; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_tag_product_dealer_menu
+    ADD CONSTRAINT "FK_73d7e7382a865bfb722278920a6" FOREIGN KEY ("productTagId") REFERENCES public.product_tag(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3524 (class 2606 OID 41625)
+-- Name: products_ingredient_product_dealer_menu FK_7add5334085056a576888a3500a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products_ingredient_product_dealer_menu
+    ADD CONSTRAINT "FK_7add5334085056a576888a3500a" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id);
+
+
+--
+-- TOC entry 3498 (class 2606 OID 30200)
+-- Name: dealer_to_admin_complient FK_7c8dcf878156ed43afe1e731a9d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_to_admin_complient
+    ADD CONSTRAINT "FK_7c8dcf878156ed43afe1e731a9d" FOREIGN KEY ("adminId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3497 (class 2606 OID 30195)
+-- Name: dealer_to_admin_complient FK_7e91850c625132dbc99ba33a0b9; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_to_admin_complient
+    ADD CONSTRAINT "FK_7e91850c625132dbc99ba33a0b9" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3507 (class 2606 OID 40873)
+-- Name: rating FK_87a38593638839b02b90a59dd5a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rating
+    ADD CONSTRAINT "FK_87a38593638839b02b90a59dd5a" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3499 (class 2606 OID 38415)
+-- Name: dealer_notifications FK_8d7ec29041ee84fbd68a326992f; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_notifications
+    ADD CONSTRAINT "FK_8d7ec29041ee84fbd68a326992f" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3492 (class 2606 OID 27531)
+-- Name: dealer_menu FK_90017461da1a9ca67d49235589a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu
+    ADD CONSTRAINT "FK_90017461da1a9ca67d49235589a" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3534 (class 2606 OID 42141)
+-- Name: order_item FK_904370c093ceea4369659a3c810; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_item
+    ADD CONSTRAINT "FK_904370c093ceea4369659a3c810" FOREIGN KEY ("productId") REFERENCES public.dealer_menu(id);
+
+
+--
+-- TOC entry 3522 (class 2606 OID 41615)
+-- Name: product_add_on_product_dealer_menu FK_9aeff4c697a3a67310fef49143d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_add_on_product_dealer_menu
+    ADD CONSTRAINT "FK_9aeff4c697a3a67310fef49143d" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id);
+
+
+--
+-- TOC entry 3515 (class 2606 OID 41111)
+-- Name: dealer_menu_ingredient_products_ingredient FK_9ea09ef57febf224e9c394b5254; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_ingredient_products_ingredient
+    ADD CONSTRAINT "FK_9ea09ef57febf224e9c394b5254" FOREIGN KEY ("productsIngredientId") REFERENCES public.products_ingredient(id);
+
+
+--
+-- TOC entry 3531 (class 2606 OID 42131)
+-- Name: order_management FK_a83b0d943aceb203fb2f8f1b21b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_management
+    ADD CONSTRAINT "FK_a83b0d943aceb203fb2f8f1b21b" FOREIGN KEY ("agentId") REFERENCES public.agent(id);
+
+
+--
+-- TOC entry 3519 (class 2606 OID 41571)
+-- Name: dealer_menu_customization_product_customization FK_ad46fa37398f34580c6e2ee7dbc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_customization_product_customization
+    ADD CONSTRAINT "FK_ad46fa37398f34580c6e2ee7dbc" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3496 (class 2606 OID 30001)
+-- Name: dealer_managestaff FK_ad638eb9e0e4479557367089603; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_managestaff
+    ADD CONSTRAINT "FK_ad638eb9e0e4479557367089603" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3521 (class 2606 OID 41610)
+-- Name: product_add_on_product_dealer_menu FK_b1ad13f8337a3295ccbd6528fa3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_add_on_product_dealer_menu
+    ADD CONSTRAINT "FK_b1ad13f8337a3295ccbd6528fa3" FOREIGN KEY ("productAddOnId") REFERENCES public.product_add_on(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3512 (class 2606 OID 41072)
+-- Name: dealer_menu_addons_product_add_on FK_be252517ff161a8ff3a8c14f0e5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dealer_menu_addons_product_add_on
+    ADD CONSTRAINT "FK_be252517ff161a8ff3a8c14f0e5" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3518 (class 2606 OID 41666)
+-- Name: product_customization FK_c0a352d5d4b0102b469d1dd60bc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_customization
+    ADD CONSTRAINT "FK_c0a352d5d4b0102b469d1dd60bc" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3526 (class 2606 OID 41635)
+-- Name: product_tag_product_dealer_menu FK_c90a1a7266d7f870395936b7af1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_tag_product_dealer_menu
+    ADD CONSTRAINT "FK_c90a1a7266d7f870395936b7af1" FOREIGN KEY ("dealerMenuId") REFERENCES public.dealer_menu(id);
+
+
+--
+-- TOC entry 3523 (class 2606 OID 41620)
+-- Name: products_ingredient_product_dealer_menu FK_ca26b7f86e3924021af7ed0f529; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products_ingredient_product_dealer_menu
+    ADD CONSTRAINT "FK_ca26b7f86e3924021af7ed0f529" FOREIGN KEY ("productsIngredientId") REFERENCES public.products_ingredient(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3501 (class 2606 OID 42116)
+-- Name: payment FK_d09d285fe1645cd2f0db811e293; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT "FK_d09d285fe1645cd2f0db811e293" FOREIGN KEY ("orderId") REFERENCES public.order_management(id);
+
+
+--
+-- TOC entry 3493 (class 2606 OID 27632)
+-- Name: promo_offers FK_d326e71b9c180cac9d70f69c037; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.promo_offers
+    ADD CONSTRAINT "FK_d326e71b9c180cac9d70f69c037" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3509 (class 2606 OID 42075)
+-- Name: product_add_on FK_f0fc12c4c4c1fe536929e61a359; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_add_on
+    ADD CONSTRAINT "FK_f0fc12c4c4c1fe536929e61a359" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3503 (class 2606 OID 39778)
+-- Name: category FK_f2a1c91eb96f30caa3261ef4b73; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT "FK_f2a1c91eb96f30caa3261ef4b73" FOREIGN KEY ("dealermenuId") REFERENCES public.dealer_menu(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3502 (class 2606 OID 39225)
+-- Name: restaurant_slot_timing FK_f4da8923ada3dfb61298fb60632; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.restaurant_slot_timing
+    ADD CONSTRAINT "FK_f4da8923ada3dfb61298fb60632" FOREIGN KEY ("dealerId") REFERENCES public.dealer_entity(id);
+
+
+--
+-- TOC entry 3495 (class 2606 OID 29955)
+-- Name: admin_notification FK_fe092ed5f081f12873fa9c9ee55; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_notification
+    ADD CONSTRAINT "FK_fe092ed5f081f12873fa9c9ee55" FOREIGN KEY ("adminId") REFERENCES public.admin_info(id);
+
+
+-- Completed on 2024-09-23 11:48:22 IST
+
+--
+-- PostgreSQL database dump complete
+--
+
